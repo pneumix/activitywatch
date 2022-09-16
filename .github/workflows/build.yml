@@ -17,7 +17,7 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     env:
       # sets the macOS version target, see: https://users.rust-lang.org/t/compile-rust-binary-for-older-versions-of-mac-osx/38695
-      MACOSX_DEPLOYMENT_TARGET: 10.9
+      MACOSX_DEPLOYMENT_TARGET: 10.12
     strategy:
       fail-fast: false
       matrix:
@@ -51,18 +51,7 @@ jobs:
       if: matrix.os != 'macOS-latest'
       uses: actions/setup-python@v1
       with:
-        python-version: ${{ matrix.python_version }}
-
-    # Setup Python version built for older macOS (https://github.com/actions/virtual-environments/issues/1256)
-    - name: Set up Python for macOS
-      if: matrix.os == 'macOS-latest'
-      run: |
-        curl https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-macosx10.9.pkg -o "python.pkg"
-        sudo installer -pkg python.pkg -target /
-        echo "/Library/Frameworks/Python.framework/Versions/${{ matrix.python_version }}/bin" >> $GITHUB_PATH
-      env:
-        # Add the patch number to the Python version (for FTP download link)
-        PYTHON_VERSION: ${{ matrix.python_version }}.9
+        python-version: "3.10"
 
     - name: Set up Node
       if: ${{ !matrix.skip_webui }}
